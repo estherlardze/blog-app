@@ -8,3 +8,9 @@ body{
     box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
 }
+
+.links:hover, .links:focus{
+  background-color: rgb(50, 50, 173);
+  color: white;
+}
+
