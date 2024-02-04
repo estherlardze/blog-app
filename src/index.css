@@ -10,7 +10,7 @@ body{
 }
 
 .links:hover, .links:focus{
-  background-color: rgb(50, 50, 173);
+  background-color: #3232ad;
   color: white;
 }
 
