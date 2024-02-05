@@ -1,9 +1,16 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom';
+import { Link , useNavigate} from 'react-router-dom';
 import {auth} from '../firebase'
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import {  toast } from 'react-toastify';
+
 
 const Auth = ({header, setHeader}) => {
    const [signUp, setSignUp]  = useState(false)
+   const navigate = useNavigate()
+   const [showPassword, setShowPassword] = useState(false)
+   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
    const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -13,6 +20,14 @@ const Auth = ({header, setHeader}) => {
   });
 
 
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const toggleShowConfirmPassword = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
+
    const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -20,7 +35,41 @@ const Auth = ({header, setHeader}) => {
     });
   };
 
- 
+ const handleAuth = async (e) => {
+    e.preventDefault()
+
+    if(!signUp){
+        if(formData.email && formData.password){
+          const { user } = await signInWithEmailAndPassword(auth, formData.email, formData.password)
+          console.log(user)
+          navigate('/')
+        }
+        else
+        {
+          return toast.error("All fields are required")
+        }
+
+    } 
+    else 
+    {
+       if(formData.password !== formData.confirmPassword){
+          return toast.error('Passwords do not match')
+       }
+
+      if (formData.firstName && formData.lastName && formData.email && formData.password){
+         const { user } = await createUserWithEmailAndPassword(auth, formData.email, formData.password)
+         console.log(user)
+          navigate('/')
+      }
+      else {
+        return toast.error("All fields are required")
+      }
+
+ }
+
+}
+
+
   return (
     <div className='max-w-md mx-auto mt-8 shadow-lg p-4 rounded-md bg-blue-800/5'>
       {
@@ -29,17 +78,17 @@ const Auth = ({header, setHeader}) => {
         <h1 className='font-semibold text-center text-2xl'>Sign In</h1>
       }
     
-      <form  className='mt-4'>
+      <form  className='mt-4' onSubmit={handleAuth}>
         {signUp && (
             <div className='flex flex-col sm:flex-row gap-4'>
-            <div className="mb-4 ">
+             <div className="mb-4 ">
               <label htmlFor="firstname" className="block text-sm font-medium text-gray-600">
                 First Name
               </label>
               <input
                 type="text"
                 id="firstname"
-                name="firstname"
+                name="firstName"
                 value={formData.firstName}
                 onChange={handleChange}
                 className="mt-1 p-2 border border-gray-300 rounded-md w-full outline-blue-700/30"
@@ -47,13 +96,13 @@ const Auth = ({header, setHeader}) => {
             </div>
   
             <div className="mb-4">
-              <label htmlFor="email" className="block text-sm font-medium text-gray-600">
+              <label htmlFor="lastname" className="block text-sm font-medium text-gray-600">
                 Last Name
               </label>
               <input
-                type="email"
-                id="email"
-                name="email"
+                type="text"
+                id="lastname"
+                name="lastName"
                 value={formData.lastName}
                 onChange={handleChange}
                 className="mt-1 p-2 border border-gray-300 rounded-md w-full outline-blue-700/30"
@@ -80,31 +129,42 @@ const Auth = ({header, setHeader}) => {
           <label htmlFor="password" className="block text-sm font-medium text-gray-600 ">
             Password
           </label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            className="mt-1 p-2 border border-gray-300 rounded-md w-full outline-blue-700/30"
-          />
+          <div className='border p-2 border-gray-300 bg-white rounded-md w-full flex justify-between items-center outline-blue-700/30'>
+            <input
+              type={`${showPassword ? 'text' : 'password'}`}
+              id="password"
+              name="password"
+              value={formData.name}
+              onChange={handleChange}
+              className="outline-none bg-transparent"
+            />
+
+             {showPassword ? <FaEye onClick={toggleShowPassword}/> : <FaEyeSlash onClick={toggleShowPassword}/>}
+             
+          </div>
         </div>
 
        {
         signUp && (
+
           <div className="mb-4">
-          <label htmlFor="name" className="block text-sm font-medium text-gray-600">
-          Comfirm Password
-          </label>
-          <input
-            type="password"
-            id="comfirmPassword"
-            name="comfirmPassword"
-            value={formData.name}
-            onChange={handleChange}
-            className="mt-1 p-2 border border-gray-300 rounded-md w-full outline-blue-700/30"
-          />
+            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-600 bg-white">
+              Confirm Password
+            </label>
+            <div className='border p-2 border-gray-300 rounded-md w-full flex justify-between items-center outline-blue-700/30'>
+              <input
+                type={`${showConfirmPassword ? 'text' : 'password'}`}
+                id="confirmPassword"  
+                name="confirmPassword" 
+                value={formData.confirmPassword} 
+                onChange={handleChange}
+                className="outline-none bg-transparent"
+              />
+
+              {showConfirmPassword ? <FaEye onClick={toggleShowConfirmPassword}/> : <FaEyeSlash onClick={toggleShowConfirmPassword}/>}
+          </div>
         </div>
+
         )
        }
 
