@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Link , useNavigate} from 'react-router-dom';
 import {auth} from '../firebase'
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import {  toast } from 'react-toastify';
 
@@ -41,7 +41,7 @@ const Auth = ({header, setHeader}) => {
     if(!signUp){
         if(formData.email && formData.password){
           const { user } = await signInWithEmailAndPassword(auth, formData.email, formData.password)
-          console.log(user)
+         // console.log(user)
           navigate('/')
         }
         else
@@ -58,7 +58,9 @@ const Auth = ({header, setHeader}) => {
 
       if (formData.firstName && formData.lastName && formData.email && formData.password){
          const { user } = await createUserWithEmailAndPassword(auth, formData.email, formData.password)
-         console.log(user)
+         await updateProfile(user, {displayName: `${formData.firstName} ${formData.lastName}`})
+         
+         //console.log(user)
           navigate('/')
       }
       else {
