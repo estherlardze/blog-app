@@ -8,16 +8,17 @@ import Navbar from './components/Navbar'
 import { useEffect, useState } from 'react'
 import { signOut } from 'firebase/auth'
 
-export default function App() {
+const App = () => {
   const [header, setHeader] = useState('home')
   const [user, setUser] = useState(null)
- // const navigate = useNavigate()
+  const navigate = useNavigate()
 
 useEffect(() =>{
    auth.onAuthStateChanged(authUser => {
     if(authUser){
       setUser(authUser)
       console.log(`authUser: ${authUser}`)
+      navigate('/auth')
     }
     else{
       setUser(null)
@@ -54,3 +55,5 @@ const handleLogout = () => {
     </BrowserRouter>
   )
 }
+
+export default App;

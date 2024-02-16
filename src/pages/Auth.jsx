@@ -38,16 +38,29 @@ const Auth = ({header, setHeader}) => {
  const handleAuth = async (e) => {
     e.preventDefault()
 
+   
     if(!signUp){
-        if(formData.email && formData.password){
-          const { user } = await signInWithEmailAndPassword(auth, formData.email, formData.password)
-         // console.log(user)
-          navigate('/')
+      if (!formData.email && !formData.password) {
+        return toast.error("All fields are required");
+      }
+      
+      else {
+        try {
+          const { user } = await signInWithEmailAndPassword(
+            auth,
+            formData.email,
+            formData.password
+          );
+          console.log(user);
+          navigate("/");
+        } catch (error) {
+          if (error.code === "auth/user-not-found") {
+            return toast.error("User does not exist");
+          } else {
+            return toast.error("An error occurred while signing in");
+          }
         }
-        else
-        {
-          return toast.error("All fields are required")
-        }
+      }
 
     } 
     else 
