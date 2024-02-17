@@ -1,15 +1,14 @@
+import React, { useEffect, useState } from 'react'
 import {Home, EditBlog, CreateBlog, About, Auth, BlogDetail} from './pages/index'
-import {BrowserRouter, Routes, Route} from 'react-router-dom'
+import { Routes, Route, useNavigate} from 'react-router-dom'
 import {ToastContainer} from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { auth } from './firebase'
-import {useNavigate} from 'react-router-dom'
 import Navbar from './components/Navbar'
-import { useEffect, useState } from 'react'
 import { signOut } from 'firebase/auth'
 
 const App = () => {
-  const [header, setHeader] = useState('home')
+  const [active, setActive] = useState("home")
   const [user, setUser] = useState(null)
   const navigate = useNavigate()
 
@@ -30,18 +29,20 @@ useEffect(() =>{
 console.log(`user: ${user}`)
 
 const handleLogout = () => {
+
  signOut(auth).then(() => {
   setUser(null)
-  //navigate('/')
+  setActive("login")
+  navigate('/auth')
+   
  })
 }
- 
 
 
   return (
-    <BrowserRouter>
+    <div>
       <div className='mb-[90px]'>
-        <Navbar user={user} setUser={setUser} handleLogout={handleLogout}/>
+        <Navbar user={user} handleLogout={handleLogout} active={active} setActive={setActive}/>
       </div>
       <ToastContainer position='top-center' draggable/>
        <Routes>
@@ -49,10 +50,10 @@ const handleLogout = () => {
           <Route path='/edit/:id' element={<EditBlog />} />
           <Route path='/create' element={<CreateBlog />} />
           <Route path='/about' element={<About />} />
-          <Route path='/auth' element={<Auth header={header} setHeader={setHeader}/>} />
+          <Route path='/auth' element={<Auth active={active} setActive={setActive}/>} />
           <Route path='/blog/:id' element={<BlogDetail />} />
        </Routes>
-    </BrowserRouter>
+    </div>
   )
 }
 

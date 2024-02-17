@@ -6,7 +6,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import {  toast } from 'react-toastify';
 
 
-const Auth = ({header, setHeader}) => {
+const Auth = ({ setActive}) => {
    const [signUp, setSignUp]  = useState(false)
    const navigate = useNavigate()
    const [showPassword, setShowPassword] = useState(false)
@@ -19,6 +19,7 @@ const Auth = ({header, setHeader}) => {
     confirmPassword: '',
   });
 
+const {firstName, lastName, email, password, confirmPassword} = formData
 
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
@@ -40,7 +41,7 @@ const Auth = ({header, setHeader}) => {
 
    
     if(!signUp){
-      if (!formData.email && !formData.password) {
+      if (!email && !password) {
         return toast.error("All fields are required");
       }
       
@@ -48,45 +49,42 @@ const Auth = ({header, setHeader}) => {
         try {
           const { user } = await signInWithEmailAndPassword(
             auth,
-            formData.email,
-            formData.password
+            email,
+            password
           );
+          setActive("home")
           console.log(user);
-          navigate("/");
+          
         } catch (error) {
-          if (error.code === "auth/user-not-found") {
-            return toast.error("User does not exist");
-          } else {
-            return toast.error("An error occurred while signing in");
-          }
+            return toast.error(error.code);   
         }
       }
 
     } 
     else 
     {
-       if(formData.password !== formData.confirmPassword){
+       if(password !== confirmPassword){
           return toast.error('Passwords do not match')
        }
 
-      if (formData.firstName && formData.lastName && formData.email && formData.password){
-         const { user } = await createUserWithEmailAndPassword(auth, formData.email, formData.password)
-         await updateProfile(user, {displayName: `${formData.firstName} ${formData.lastName}`})
+      if (firstName && lastName && email && password){
+         const { user } = await createUserWithEmailAndPassword(auth, email, password)
+         await updateProfile(user, {displayName: `${firstName} ${lastName}`})
+         setActive("home")
+         console.log(user)
          
-         //console.log(user)
-          navigate('/')
       }
       else {
         return toast.error("All fields are required")
       }
 
  }
-
+ navigate('/')
 }
 
 
   return (
-    <div className='max-w-md mx-auto mt-8 shadow-lg p-4 rounded-md bg-blue-800/5'>
+    <div className='max-w-md mx-auto mt-8  p-4 rounded-md'>
       {
         signUp ? 
         <h1 className='font-semibold text-center text-2xl'>Sign Up</h1> : 
@@ -104,7 +102,7 @@ const Auth = ({header, setHeader}) => {
                 type="text"
                 id="firstname"
                 name="firstName"
-                value={formData.firstName}
+                value={firstName}
                 onChange={handleChange}
                 className="mt-1 p-2 border border-gray-300 rounded-md w-full outline-blue-700/30"
               />
@@ -118,7 +116,7 @@ const Auth = ({header, setHeader}) => {
                 type="text"
                 id="lastname"
                 name="lastName"
-                value={formData.lastName}
+                value={lastName}
                 onChange={handleChange}
                 className="mt-1 p-2 border border-gray-300 rounded-md w-full outline-blue-700/30"
               />
@@ -134,7 +132,7 @@ const Auth = ({header, setHeader}) => {
             type="email"
             id="email"
             name="email"
-            value={formData.email}
+            value={email}
             onChange={handleChange}
             className="mt-1 p-2 border border-gray-300 rounded-md w-full outline-blue-700/30"
           />
@@ -149,7 +147,7 @@ const Auth = ({header, setHeader}) => {
               type={`${showPassword ? 'text' : 'password'}`}
               id="password"
               name="password"
-              value={formData.name}
+              value={password}
               onChange={handleChange}
               className="outline-none bg-transparent"
             />
@@ -163,15 +161,15 @@ const Auth = ({header, setHeader}) => {
         signUp && (
 
           <div className="mb-4">
-            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-600 bg-white">
+            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-600">
               Confirm Password
             </label>
-            <div className='border p-2 border-gray-300 rounded-md w-full flex justify-between items-center outline-blue-700/30'>
+            <div className='border p-2 border-gray-300 rounded-md w-full flex bg-white justify-between items-center outline-blue-700/30'>
               <input
                 type={`${showConfirmPassword ? 'text' : 'password'}`}
                 id="confirmPassword"  
                 name="confirmPassword" 
-                value={formData.confirmPassword} 
+                value={confirmPassword} 
                 onChange={handleChange}
                 className="outline-none bg-transparent"
               />

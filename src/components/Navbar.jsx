@@ -5,11 +5,11 @@ import { RiMenu3Fill } from "react-icons/ri";
 import { IoMdClose } from "react-icons/io";
 
 
-const Navbar = ({user, setUser, handleLogout}) => {
+const Navbar = ({user, active, setActive, handleLogout}) => {
 
   const [menu, setMenu] = useState(false)
   const userId = user?.uid
-  //console.log("userId: " + user)
+  console.log("userId: " + user)
 
 const handleMenu = () => {
   setMenu(!menu)
@@ -19,9 +19,25 @@ const handleMenu = () => {
     <div>
     <nav className='flex justify-between items-center bg-black/5 shadow-md p-4 px-8 fixed top-0 left-0 w-full'>
         <div className='sm:flex gap-5 hidden'>
-          <Link to='/' className='links p-2'>Home</Link>
-          <Link to='/create' className='links p-2'>Create</Link>
-          <Link to='/about' className='links p-2'>About</Link>
+          <Link to='/' 
+            className={`p-2 ${active === 'home' ? 'active' : ''}`}
+            onClick={() => setActive('home')}
+          >
+            Home
+          </Link>
+          <Link to='/create' 
+            className={`p-2 ${active === 'create' ? 'active' : ''}`}
+            onClick={() => setActive('create')}
+          >
+            Create
+          </Link>    
+
+          <Link to='/about' 
+            className={`p-2 ${active === 'about' ? 'active' : ''}`}
+            onClick={() => setActive('about')}
+          >
+            About
+          </Link> 
         </div>
 
         <div>
@@ -34,17 +50,20 @@ const handleMenu = () => {
                      alt="profile photo" 
                      className='w-[30px] h-[30px] rounded-full '
                   />
-                  <small>{user?.email}</small>
+                  <small>{user?.displayName || user?.email}</small>
                 </div>
-                 <p  onClick={handleLogout} className='links p-2'>
+                 <Link  onClick={handleLogout} className='links p-2'>
                    Logout
-                  </p>
+                  </Link>
               </article>
             )
              :         
              (
               <>
-                <Link to='/auth' className='links p-2'>
+                <Link to='/auth' 
+                  className={`p-2 ${active === 'login' ? 'active' : ''}`}
+                  onClick={() => setActive('login')}
+                >
                   Login
                 </Link>
 
@@ -61,12 +80,15 @@ const handleMenu = () => {
      {
       menu && (
 
-        <div className='fixed top-0 left-0 w-[50%] bg-white h-screen z-50 gap-5 sm:hidden'>
+        <div className='fixed top-0 left-0 w-[50%] bg-white h-screen z-50 gap-5 pl-5 sm:hidden'>
          <article className='flex flex-col gap-5'>
           <Link to='/' className='links p-2'>Home</Link>
           <Link to='/create' className='links p-2'>Create</Link>
           <Link to='/about' className='links p-2'>About</Link>
           <p className='links p-2'>{user?.email}</p>
+          <Link  onClick={handleLogout} className='active p-2'>
+            Logout
+          </Link>
          </article>
       </div>
       )

@@ -8,9 +8,10 @@ body{
     box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
 }
-
-.links:hover, .links:focus{
+ 
+.active, .active:hover, .active:focus{
   background-color: #3232ad;
   color: white;
+  border-bottom-left-radius: 10px;
 }
 
