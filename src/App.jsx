@@ -38,7 +38,6 @@ const handleLogout = () => {
  })
 }
 
-
   return (
     <div>
       <div className='mb-[90px]'>
@@ -48,7 +47,7 @@ const handleLogout = () => {
        <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/edit/:id' element={<EditBlog />} />
-          <Route path='/create' element={<CreateBlog />} />
+          <Route path='/create' element={<CreateBlog user={user}/>} />
           <Route path='/about' element={<About />} />
           <Route path='/auth' element={<Auth active={active} setActive={setActive}/>} />
           <Route path='/blog/:id' element={<BlogDetail />} />

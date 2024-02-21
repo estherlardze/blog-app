@@ -25,12 +25,15 @@ const handleMenu = () => {
           >
             Home
           </Link>
-          <Link to='/create' 
-            className={`p-2 ${active === 'create' ? 'active' : ''}`}
-            onClick={() => setActive('create')}
-          >
-            Create
-          </Link>    
+          {user?.uid && 
+           <Link to='/create' 
+           className={`p-2 ${active === 'create' ? 'active' : ''}`}
+           onClick={() => setActive('create')}
+         >
+           Create
+         </Link>
+          }
+              
 
           <Link to='/about' 
             className={`p-2 ${active === 'about' ? 'active' : ''}`}

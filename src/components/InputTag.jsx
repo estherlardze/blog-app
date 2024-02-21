@@ -1,4 +1,3 @@
-import React, {useState} from "react";
 import { WithContext as ReactTags } from "react-tag-input";
 
 const KeyCodes = {
@@ -8,16 +7,8 @@ const KeyCodes = {
 
 const delimiters = [KeyCodes.comma, KeyCodes.enter];
 
-const InputTag = () => {
-  const [tags, setTags] = useState([]);
-
-  const handleDelete = (i) => {
-    setTags(tags.filter((tag, index) => index !== i));
-  };
-
-  const handleAddition = (tag) => {
-    setTags([...tags, tag]);
-  };
+const InputTag = ({ tags, handleAddition, handleDelete }) => {
+  
 
 
   return (

@@ -1,9 +1,11 @@
 import React, {useState, useEffect} from 'react'
 import InputTag from '../components/InputTag'
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage'
-import { storage } from '../firebase'
+import { db, storage } from '../firebase'
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore'
+import { useNavigate } from 'react-router-dom'
 
-const CreateBlog = () => {
+const CreateBlog = ({user}) => {
 const initialState = {
   title : '',
   tags : [],
@@ -13,8 +15,10 @@ const initialState = {
 }
 
  const [form, setForm] = useState(initialState)
- const [file, setFile] = useState('')
+ const [file, setFile] = useState(null)
  const [progress, setProgress] = useState(null)
+ const navigate = useNavigate()
+ 
 
  const options = [
   "Fashion",
@@ -26,24 +30,32 @@ const initialState = {
 
  const {title, tags, trending, category, description} = form
 
+ const handleDelete = (tagToDelete) => {
+  setForm(tags.filter(tag => tag !== tagToDelete)
+  );
+};
+
+const handleAddition = (newTag) => {
+ setForm(prevState => ({
+   ...prevState,
+   tags: [...prevState.tags, newTag]
+ }));
+};
+
  const handleChange = (e) =>  {
-  setForm({...form}, [e.target.name] = e.target.value)
+  setForm({...form, [e.target.name] : e.target.value})
  }
  
- const handleTags = () => {
-
+ const handleCategory = (e) => {
+   setForm({...form, category: e.target.value})
  }
-  const handleFile = () => {
-    
-  }
+ 
 
-  const handleTrending = () => {
+  const handleTrend = (e) => {
+    setForm({...form, trending: e.target.value})
+  } 
 
-  }
-
- const onCategoryChange = () => {
-
- }
+ 
 
 useEffect(() => {
   const uploadFile = () => {
@@ -52,6 +64,7 @@ useEffect(() => {
 
     uploadImage.on('state_changed', (snapshot) => {
     const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+    console.log(`Upload is ${progress}% done.`)
     setProgress(progress)
 
     if(snapshot.state === 'paused'){
@@ -78,30 +91,54 @@ useEffect(() => {
 }, [file])
 
 
+const onSubmit = async(e) => {
+  e.preventDefault()
+
+  if(title && tags && description && trending && category && file) {
+   try{
+     await addDoc(collection(db, 'blogs'), {
+       ...form, 
+       timestamps: serverTimestamp(),
+       author: user?.displayName,
+       userId: user?.uid
+     }
+     )
+   }
+   catch(err){
+    console.log(err)
+   }
+  }
+
+  navigate('/')
+}
+
+console.log('form', form)
+
   return (
     <section className='max-w-md mx-auto'>
       <h1 className='font-bold text-2xl text-center'>Create Blog</h1>
-      <form action="" className='space-y-4'>
+      <form action="" className='space-y-4' onSubmit={onSubmit}>
         <input 
            type="text" 
            placeholder='Title' 
+           name='title'
            value={title}
            onChange={handleChange}
            className='outline-none border py-1 px-3 my-3 rounded-sm w-full'
         />
         <div className='w-full border'>
-         <InputTag/>
+         <InputTag tags={tags} handleDelete={handleDelete} handleAddition={handleAddition}/>
         </div>
 
         <article className='flex justify-between items-center text-gray-600'>
           <p>Trending Blog ? </p>
           <div className='flex gap-4'>
             <label htmlFor="yes">
-              <input type="radio" id="yes" name='trending' checked={trending === 'yes'} onChange={handleTrending}/>
+              <input type="radio" id="yes" name='trending' value='yes' checked={trending === 'yes'} onChange={handleTrend}/>
               Yes
             </label>
             <label htmlFor="no">
-              <input type="radio" id="no" name='trending' checked={trending === 'no'} onChange={handleTrending}/>
+              <input type="radio" id="no" name='trending' value='no' checked={trending === 'no'} onChange={handleTrend}/>
               No
             </label>
           </div>
@@ -109,7 +146,7 @@ useEffect(() => {
 
         <select 
            value={category} 
-           onChange={onCategoryChange}
+           onChange={handleCategory}
            className='outline-none border py-1 px-3 my-3 rounded-sm w-full text-gray-600'
         >
           <option value="">Select Category</option>
@@ -124,6 +161,7 @@ useEffect(() => {
            value={description}
            cols="30" 
            rows="5"
+           name='description'
            onChange={handleChange}
            placeholder='Description'
            className='outline-none border py-1 px-3 my-3 rounded-sm w-full'
@@ -140,6 +178,7 @@ useEffect(() => {
           <button 
             type='submit' 
             className='bg-[#3232ad] py-1 px-3 text-white '
+            disabled={progress  !== null && progress < 100}
           >
               Submit
           </button>
