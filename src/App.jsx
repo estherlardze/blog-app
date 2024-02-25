@@ -26,13 +26,13 @@ useEffect(() =>{
 }, [])
 
 
-console.log(`user: ${user}`)
+//console.log(`user: ${user}`)
 
 const handleLogout = () => {
 
  signOut(auth).then(() => {
   setUser(null)
-  setActive("login")
+  setActive("logout")
   navigate('/auth')
    
  })

@@ -55,7 +55,9 @@ const handleMenu = () => {
                   />
                   <small>{user?.displayName || user?.email}</small>
                 </div>
-                 <Link  onClick={handleLogout} className='links p-2'>
+                 <Link  onClick={handleLogout} 
+                  className={`p-2 ${active === 'logout' ? 'active' : ''}`}
+                  >
                    Logout
                   </Link>
               </article>
