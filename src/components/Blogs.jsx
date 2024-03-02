@@ -7,7 +7,7 @@ const Blogs = ({ blogs, user }) => {
   return (
     <div>
 
-        {blogs?.map((blog) =(
+        {/* {blogs?.map((blog) =(
             <article key={blog.id}>
                <div>
                  <img src={blog.image} alt="thumbnail" />
@@ -32,7 +32,7 @@ const Blogs = ({ blogs, user }) => {
                   </div>
                </div>
             </article>
-        ))}
+        ))} */}
     </div>
   )
 }
