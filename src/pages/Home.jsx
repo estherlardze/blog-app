@@ -18,7 +18,6 @@ useEffect(() => {
      snapshot.docs.forEach((doc) => {
        list.push({id:doc.id, ...doc.data()});
      })
-     Object.entries(list)
      setBlogs(list)
      setLoading(false)
   }, (error) => console.log(error))
@@ -28,7 +27,7 @@ useEffect(() => {
   }
 }, [])
 
-//console.log(blogs)
+console.log(blogs)
   return (
     <section className='flex flex-col w-[90%] mx-[5%]  items-center'>
       <div>

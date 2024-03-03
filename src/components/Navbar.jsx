@@ -17,7 +17,7 @@ const handleMenu = () => {
 
   return (
     <div>
-    <nav className='flex justify-between items-center bg-black/5 shadow-md p-4 px-8 fixed top-0 left-0 w-full'>
+    <nav className='flex justify-between items-center bg-white shadow-md p-4 px-8 fixed top-0 left-0 w-full'>
         <div className='sm:flex gap-5 hidden'>
           <Link to='/' 
             className={`p-2 ${active === 'home' ? 'active' : ''}`}
