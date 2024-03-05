@@ -29,7 +29,12 @@ useEffect(() => {
 
 console.log(blogs)
   return (
-    <section className='flex flex-col w-[90%] mx-[5%]  items-center'>
+    <>
+     {
+      loading ? <h1>loading...</h1> : 
+
+      (
+        <section className='flex flex-col w-[90%] mx-[5%]  items-center'>
       <div>
         <h1>trending</h1>
       </div>
@@ -46,6 +51,10 @@ console.log(blogs)
       </div>
      
     </section>
+      )
+     }
+    </>
+    
   )
 }
 

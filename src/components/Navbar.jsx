@@ -17,7 +17,7 @@ const handleMenu = () => {
 
   return (
     <div>
-    <nav className='flex justify-between items-center bg-white shadow-md p-4 px-8 fixed top-0 left-0 w-full'>
+     <nav className='flex justify-between items-center bg-white shadow-md p-4 px-8 fixed top-0 left-0 w-full'>
         <div className='sm:flex gap-5 hidden'>
           <Link to='/' 
             className={`p-2 ${active === 'home' ? 'active' : ''}`}
@@ -25,12 +25,14 @@ const handleMenu = () => {
           >
             Home
           </Link>
-          {user?.uid && 
+
+          {
+           userId && 
            <Link to='/create' 
-           className={`p-2 ${active === 'create' ? 'active' : ''}`}
-           onClick={() => setActive('create')}
-         >
-           Create
+              className={`p-2 ${active === 'create' ? 'active' : ''}`}
+              onClick={() => setActive('create')}
+           >
+            Create
          </Link>
           }
               
@@ -55,24 +57,22 @@ const handleMenu = () => {
                   />
                   <small>{user?.displayName || user?.email}</small>
                 </div>
-                 <Link  onClick={handleLogout} 
-                  className={`p-2 ${active === 'logout' ? 'active' : ''}`}
+                 <p
+                   onClick={handleLogout} 
+                   className='p-2 cursor-pointer'
                   >
                    Logout
-                  </Link>
+                  </p>
               </article>
             )
              :         
              (
-              <>
-                <Link to='/auth' 
-                  className={`p-2 ${active === 'login' ? 'active' : ''}`}
-                  onClick={() => setActive('login')}
-                >
-                  Login
-                </Link>
-
-              </>
+              <Link to='/auth' 
+                className={`p-2 ${active === 'login' ? 'active' : ''}`}
+                onClick={() => setActive('login')}
+              >
+                Login
+              </Link> 
               )  
             }
         </div>

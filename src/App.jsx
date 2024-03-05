@@ -8,7 +8,7 @@ import Navbar from './components/Navbar'
 import { signOut } from 'firebase/auth'
 
 const App = () => {
-  const [active, setActive] = useState("home")
+  const [active, setActive] = useState("")
   const [user, setUser] = useState(null)
   const navigate = useNavigate()
 
@@ -16,8 +16,6 @@ useEffect(() =>{
    auth.onAuthStateChanged(authUser => {
     if(authUser){
       setUser(authUser)
-      console.log(`authUser: ${authUser}`)
-      navigate('/auth')
     }
     else{
       setUser(null)

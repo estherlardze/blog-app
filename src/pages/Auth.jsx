@@ -8,7 +8,6 @@ import {  toast } from 'react-toastify';
 
 const Auth = ({ setActive}) => {
    const [signUp, setSignUp]  = useState(false)
-   const navigate = useNavigate()
    const [showPassword, setShowPassword] = useState(false)
    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
    const [formData, setFormData] = useState({
@@ -18,6 +17,8 @@ const Auth = ({ setActive}) => {
     password: '',
     confirmPassword: '',
   });
+
+const navigate = useNavigate()
 
 const {firstName, lastName, email, password, confirmPassword} = formData
 
@@ -53,7 +54,8 @@ const {firstName, lastName, email, password, confirmPassword} = formData
             password
           );
           setActive("home")
-          console.log(user);
+          console.log('user', user);
+          navigate('/')
           
         } catch (error) {
             return toast.error(error.code);   
@@ -72,6 +74,7 @@ const {firstName, lastName, email, password, confirmPassword} = formData
          await updateProfile(user, {displayName: `${firstName} ${lastName}`})
          setActive("home")
          console.log(user)
+         navigate('/')
          
       }
       else {
@@ -79,7 +82,7 @@ const {firstName, lastName, email, password, confirmPassword} = formData
       }
 
  }
- navigate('/')
+
 }
 
 
@@ -187,7 +190,7 @@ const {firstName, lastName, email, password, confirmPassword} = formData
            signUp ? (
             <button
                type="submit"
-               className="bg-[#3232ad] text-white p-2 rounded-md hover:bg-blue-600 w-[100%]"
+               className="bg-[#3232ad] text-white p-2 rounded-md w-[100%]"
             >
              Sign Up
            </button>
@@ -196,7 +199,7 @@ const {firstName, lastName, email, password, confirmPassword} = formData
           (
             <button
             type="submit"
-            className="bg-[#3232ad] text-white p-2 rounded-md hover:bg-blue-600 w-[100%]"
+            className="bg-[#3232ad] text-white p-2 rounded-md w-[100%]"
           >
             Login
           </button>
