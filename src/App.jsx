@@ -30,9 +30,7 @@ const handleLogout = () => {
 
  signOut(auth).then(() => {
   setUser(null)
-  setActive("logout")
-  navigate('/auth')
-   
+  navigate('/auth') 
  })
 }
 
@@ -48,7 +46,7 @@ const handleLogout = () => {
           <Route path='/create' element={<CreateBlog user={user}/>} />
           <Route path='/about' element={<About />} />
           <Route path='/auth' element={<Auth active={active} setActive={setActive}/>} />
-          <Route path='/blog/:id' element={<BlogDetail />} />
+          <Route path='/blog/:id' element={<BlogDetail setActive={setActive} />} />
        </Routes>
     </div>
   )

@@ -2,6 +2,7 @@ import { collection, onSnapshot } from 'firebase/firestore'
 import React, {useState, useEffect} from 'react'
 import { db } from '../firebase'
 import Blogs from '../components/Blogs'
+import Trending from '../components/Trending'
 
 
 const Home = () => {
@@ -34,19 +35,20 @@ console.log(blogs)
       loading ? <h1>loading...</h1> : 
 
       (
-        <section className='flex flex-col w-[90%] mx-[5%]  items-center'>
+        <section className='flex flex-col w-[90%] mx-[5%] items-center '>
       <div>
-        <h1>trending</h1>
+         {/* <Trending blogs={blogs}/> */}
+         helloo
       </div>
 
-      <div className='grid grid-cols-3 mt-4'>
-        <article className='col-span-2'>
+      <div className='grid grid-cols-3 gap-x-8 mt-4'>
+        <article className='col-span-3 lg:col-span-2'>
           <Blogs blogs={blogs}/>
         </article>
 
-        <article className='col-span-1'>
-          <h1>Tags</h1>
-          <h1>Most popular</h1>
+        <article className='col-span-3 lg:col-span-1 flex flex-col sm:flex-row lg:flex-col'>
+          <div>Tags</div>
+          <div>Most popular</div>
         </article>
       </div>
      

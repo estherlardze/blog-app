@@ -25,7 +25,9 @@ const initialState = {
   "Technology",
   "Travel",
   "Music",
-  "Sports"
+  "Sports",
+  "Social",
+  "Science"
  ]
 
  const {title, tags, trending, category, description} = form
