@@ -8,8 +8,6 @@ const KeyCodes = {
 const delimiters = [KeyCodes.comma, KeyCodes.enter];
 
 const InputTag = ({ tags, handleAddition, handleDelete }) => {
-  
-
 
   return (
     <div id="tags">

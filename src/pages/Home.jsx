@@ -38,7 +38,7 @@ useEffect(() => {
          setLoading(true)
          await deleteDoc(doc(db, 'blogs', id))
          setLoading(false)
-         toast.info('Blog Deleted Successfully!')
+         toast.success('Blog Deleted Successfully!')
 
       }catch(err){
        console.log(err)

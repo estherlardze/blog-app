@@ -42,7 +42,7 @@ const handleLogout = () => {
       <ToastContainer position='top-center' draggable/>
        <Routes>
           <Route path='/' element={<Home user={user}/>} />
-          <Route path='/edit/:id' element={<CreateBlog />} />
+          <Route path='/edit/:id' element={<CreateBlog user={user}/>} />
           <Route path='/create' element={<CreateBlog user={user}/>} />
           <Route path='/about' element={<About />} />
           <Route path='/auth' element={<Auth active={active} setActive={setActive}/>} />

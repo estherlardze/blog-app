@@ -2,8 +2,9 @@ import React, {useState, useEffect} from 'react'
 import InputTag from '../components/InputTag'
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage'
 import { db, storage } from '../firebase'
-import { addDoc, collection, doc, getDoc, serverTimestamp } from 'firebase/firestore'
+import { addDoc, collection, doc, getDoc, serverTimestamp, updateDoc } from 'firebase/firestore'
 import { useNavigate, useParams } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 const CreateBlog = ({user}) => {
 const initialState = {
@@ -19,8 +20,6 @@ const initialState = {
  const [progress, setProgress] = useState(null)
  const navigate = useNavigate()
  const { id } = useParams()
- 
-
  const options = [
   "Fashion",
   "Technology",
@@ -39,10 +38,10 @@ const initialState = {
 };
 
 const handleAddition = (newTag) => {
- setForm(prevState => ({
-   ...prevState,
-   tags: [...prevState.tags, newTag]
- }));
+  setForm(prevState => ({
+    ...prevState,
+    tags: prevState.tags ? [...prevState.tags, newTag] : [newTag]
+  }));
 };
 
  const handleChange = (e) =>  {
@@ -110,26 +109,49 @@ const getBlogDetail = async() => {
 const onSubmit = async(e) => {
   e.preventDefault()
 
-  if(title && tags && description && trending && category && file) {
-   try{
-     await addDoc(collection(db, 'blogs'), {
-       ...form, 
-       timestamps: serverTimestamp(),
-       author: user?.displayName,
-       userId: user?.uid
-     }
-     )
+  if(title && tags && description && trending && category) {
+   if(!id) {
+    try{
+      await addDoc(collection(db, 'blogs'), {
+        ...form, 
+        timestamps: serverTimestamp(),
+        author: user?.displayName,
+        userId: user?.uid
+      }
+      )
+      toast.success("Blog created successfully")
+
+    }
+    catch(err){
+     console.log(err)
+    }
+   }else{
+    try{
+      if(user){
+        await updateDoc(doc(db, 'blogs', id), {
+          ...form, 
+          timestamps: serverTimestamp(),
+          author: user?.displayName,
+          userId: user?.uid
+        })
+      }
+      toast.success("Blog updated successfully")
+
+    }
+   
+    catch(err){
+     console.log(err)
+    }
    }
-   catch(err){
-    console.log(err)
-   }
+  }else{
+    toast.error("All fields are required")
   }
 
   navigate('/')
 }
 
 console.log('form', form)
-
+console.log('ccc',user)
   return (
     <section className='max-w-md mx-auto'>
       <h1 className='font-bold text-2xl text-center'>{id ? "Update Blog" : "Create Blog"}</h1>
@@ -167,7 +189,7 @@ console.log('form', form)
         >
           <option value="">Select Category</option>
           {options.map((option, index) => (
-             <option key={index} value={option || ''}>
+             <option key={index} value={option || ''} className='text-sm'>
               {option}
              </option>
           ))}
