@@ -3,12 +3,15 @@ import { FaTrash, FaEdit } from "react-icons/fa";
 import { Link } from 'react-router-dom';
 import Popup from './Popup';
 
-const Blogs = ({ blogs, user }) => {
- const [deleteBlog, setDeleteBlog] = useState(false)
 
- const handleDelete = () => {
-   setDeleteBlog(true)
- }
+const Blogs = ({ blogs, user, handleDelete }) => {
+ const userId = user?.uid
+
+//  const handleDelete = () => {
+//    setDeleteBlog(true)
+//  }
+
+ 
  
   return (
     <section>
@@ -32,19 +35,24 @@ const Blogs = ({ blogs, user }) => {
                   </div>
                   <p className='text-sm'>{blog.description.substring(0,120)}...</p>
 
-                  <div className='flex justify-between items-center mt-3'>
-                     <Link to={`/blog/${blog.id}`} className='bg-gray-600 py-1 px-2 text-white text-sm'>
-                       Read More
-                      </Link>
-                     <div className='flex gap-5'>
-                      <FaTrash className='text-red-700 cursor-pointer' size={21} onClick={handleDelete}/>
-                      <Link to={`/edit/${blog.id}`} >
-                        <FaEdit className='text-[#3232ad]' size={22} />
-                         
-                      </Link>
-                      <Popup deleteBlog={deleteBlog} setDeleteBlog={setDeleteBlog}/>
-                     </div>
-                  </div>
+                    {user?.uid && blog.userId === user.uid && (
+                       <div className='flex justify-between items-center mt-3'>
+                          <Link to={`/blog/${blog.id}`} className='bg-gray-600 py-1 px-2 text-white text-sm'>
+                           Read More
+                         </Link>
+                        <div className='flex gap-5'>
+                          <FaTrash 
+                            className='text-red-700 cursor-pointer' 
+                            size={21} 
+                            onClick={() => handleDelete(blog.id)}
+                          />
+                          <Link to={`/edit/${blog.id}`} >
+                            <FaEdit className='text-[#3232ad]' size={22} />                         
+                          </Link>
+                          {/* <Popup deleteBlog={deleteBlog} setDeleteBlog={setDeleteBlog}/> */}
+                      </div>
+                       </div>
+                    )}
                </div>
             </article>
         ))}

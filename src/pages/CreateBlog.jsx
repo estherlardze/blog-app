@@ -2,8 +2,8 @@ import React, {useState, useEffect} from 'react'
 import InputTag from '../components/InputTag'
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage'
 import { db, storage } from '../firebase'
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore'
-import { useNavigate } from 'react-router-dom'
+import { addDoc, collection, doc, getDoc, serverTimestamp } from 'firebase/firestore'
+import { useNavigate, useParams } from 'react-router-dom'
 
 const CreateBlog = ({user}) => {
 const initialState = {
@@ -18,6 +18,7 @@ const initialState = {
  const [file, setFile] = useState(null)
  const [progress, setProgress] = useState(null)
  const navigate = useNavigate()
+ const { id } = useParams()
  
 
  const options = [
@@ -92,6 +93,19 @@ useEffect(() => {
 
 }, [file])
 
+useEffect(() => {
+  id && getBlogDetail()
+}, [id])
+
+const getBlogDetail = async() => {
+   const docRef = doc(db, 'blogs', id)
+   const snapshot = await getDoc(docRef)
+   if(snapshot.exists()){
+     setForm({...snapshot.data()})
+   }
+   
+}
+
 
 const onSubmit = async(e) => {
   e.preventDefault()
@@ -118,7 +132,7 @@ console.log('form', form)
 
   return (
     <section className='max-w-md mx-auto'>
-      <h1 className='font-bold text-2xl text-center'>Create Blog</h1>
+      <h1 className='font-bold text-2xl text-center'>{id ? "Update Blog" : "Create Blog"}</h1>
       <form action="" className='space-y-4' onSubmit={onSubmit}>
         <input 
            type="text" 
@@ -182,7 +196,7 @@ console.log('form', form)
             className='bg-[#3232ad] py-1 px-3 text-white '
             disabled={progress  !== null && progress < 100}
           >
-              Submit
+             {id ? "Update" : "Submit"}
           </button>
         </div>
       </form>
