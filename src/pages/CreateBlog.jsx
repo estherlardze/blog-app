@@ -6,7 +6,7 @@ import { addDoc, collection, doc, getDoc, serverTimestamp, updateDoc } from 'fir
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
-const CreateBlog = ({user}) => {
+const CreateBlog = ({user, setActive}) => {
 const initialState = {
   title : '',
   tags : [],
@@ -120,7 +120,6 @@ const onSubmit = async(e) => {
       }
       )
       toast.success("Blog created successfully")
-
     }
     catch(err){
      console.log(err)

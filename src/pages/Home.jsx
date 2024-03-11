@@ -5,12 +5,14 @@ import { deleteDoc, doc } from 'firebase/firestore';
 import { db } from '../firebase';
 import Trending from '../components/Trending'
 import { toast } from 'react-toastify'
+import Tags from '../components/Tags';
+import Popular from '../components/Popular';
 
 
-const Home = ({user}) => {
+const Home = ({user, setActive}) => {
  const [blogs, setBlogs] = useState([])
  const [loading, setLoading] = useState(false)
- 
+ const [tags, setTags] = useState([])
 
 
 useEffect(() => {
@@ -18,12 +20,16 @@ useEffect(() => {
   const unSub = onSnapshot(collection(db, 'blogs'), 
   (snapshot) => {
      let list = [];
-
+     let tags = [];
      snapshot.docs.forEach((doc) => {
+       tags.push({...doc.get('tags')});
        list.push({id:doc.id, ...doc.data()});
      })
+     const uniqueTags = [...new Set(tags)]
+     setTags(uniqueTags)
      setBlogs(list)
      setLoading(false)
+     setActive('home')
   }, (error) => console.log(error))
 
   return () => {
@@ -68,8 +74,12 @@ useEffect(() => {
         </article>
 
         <article className='col-span-3 lg:col-span-1 flex flex-col sm:flex-row lg:flex-col'>
-          <div>Tags</div>
-          <div>Most popular</div>
+          <div>
+            <Tags tags={tags}/> 
+          </div>
+          <div>
+            <Popular blogs={blogs}/>
+          </div>
         </article>
       </div>
      
