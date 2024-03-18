@@ -58,9 +58,9 @@ useEffect(() => {
       loading ? <h1>loading...</h1> : 
 
       (
-        <section className='flex flex-col w-[90%] mx-[5%] items-center '>
+        <section className='flex flex-col w-[90%] mx-[5%] items-center overflow-hidden'>
       <div>
-         {/* <Trending blogs={blogs}/> */}
+         <Trending blogs={blogs}/> 
          helloo
       </div>
 
