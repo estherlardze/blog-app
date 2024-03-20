@@ -15,6 +15,16 @@ body{
   border-bottom-left-radius: 10px;
 }
 
+.scroll-container{
+  -ms-overflow-style: none;
+   scrollbar-width: none;
+}
+.scroll-container::-webkit-scrollbar{
+    display: none;
+}
+
+
+
 .embla {
   overflow: hidden;
 }
