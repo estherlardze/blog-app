@@ -14,8 +14,6 @@ const Blogs = ({ blogs, user, handleDelete }) => {
  
  
   return (
-    <section>
-       <h1 className='mb-3 border-b-2'>Daily Blogs</h1>
        <div className='flex flex-col gap-y-4'>
          {blogs?.map((blog) => (
             <article key={blog.id} className='flex flex-col sm:flex-row gap-5'>
@@ -58,7 +56,6 @@ const Blogs = ({ blogs, user, handleDelete }) => {
         ))}
      
        </div>
-    </section>
   )
 }
 

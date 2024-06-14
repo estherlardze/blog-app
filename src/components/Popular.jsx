@@ -5,7 +5,7 @@ const Popular = ({blogs}) => {
  
   return (
     <div>
-        <h1 className='mb-3 border-b-2'>Popular Blogs</h1>
+        <h1 className='mb-3 border-b-2 text-2xl font-bold'>Popular Blogs</h1>
 
         {blogs.map((blog) => (
           <article key={blog.id} className=''>

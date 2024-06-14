@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import { auth } from './firebase'
 import Navbar from './components/Navbar'
 import { signOut } from 'firebase/auth'
+import Footer from './components/Footer'
 
 const App = () => {
   const [active, setActive] = useState("")
@@ -36,7 +37,7 @@ const handleLogout = () => {
 
   return (
     <div>
-      <div className='mb-[90px]'>
+      <div className='mb-[70px]'>
         <Navbar user={user} handleLogout={handleLogout} active={active} setActive={setActive}/>
       </div>
       <ToastContainer position='top-center' draggable/>
@@ -47,7 +48,9 @@ const handleLogout = () => {
           <Route path='/about' element={<About />} />
           <Route path='/auth' element={<Auth active={active} setActive={setActive}/>} />
           <Route path='/blog/:id' element={<BlogDetail setActive={setActive} />} />
+          {/* <Route path='/chat' element={<Chat />} /> */}
        </Routes>
+       <Footer/>
     </div>
   )
 }

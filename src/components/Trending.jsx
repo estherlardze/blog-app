@@ -1,60 +1,78 @@
-import React, {useRef} from 'react'
-import { Link } from 'react-router-dom'
-import { IoIosArrowForward } from "react-icons/io";
-import { IoIosArrowBack } from "react-icons/io";
+import React, { useRef } from "react";
+import { Link } from "react-router-dom";
+import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
+import { formatDistanceToNow } from 'date-fns';
+import { CiBookmark } from "react-icons/ci";
 
+const calculateReadingTime = (text) => {
+  const wordsPerMinute = 200; 
+  const textLength = text?.split(/\s+/).length; 
+  const readingTime = Math.ceil(textLength / wordsPerMinute);
+  return `${readingTime} min read`;
+};
 
 const Trending = ({ blogs }) => {
- 
-  const scrollRef = useRef(null)
+  const scrollRef = useRef(null);
 
   const scroll = (direction) => {
-    const { current } =  scrollRef;
-
-    if(direction === 'left') {
-      current.scrollLeft =- 300
-    }else if(direction === 'right'){
-      current.scrollLeft =+ 300
+    const { current } = scrollRef;
+    if (direction === "left") {
+      current.scrollBy({ left: -400, behavior: "smooth" });
+    } else if (direction === "right") {
+      current.scrollBy({ left: 400, behavior: "smooth" });
     }
-  }
+  };
 
-
-  console.log('blogs from trending: ', blogs)
+  console.log("blogs from trending: ", blogs);
   return (
-       <section className='w-[90%] mx-[5%]'>
-         <h1 className='mb-3 border-b-2'>Trending Blogs</h1>
-         <div className='overflow-x-scroll flex gap-4 container scroll-container' ref={scrollRef}>
-         {blogs.map((blog) => (
-            <article className=''>
-                {
-                blog.trending === 'yes' && (
-                <Link to={`/blog/${blog.id}`} className='relative z-10'>
-                    <img src={blog.image} alt="thumbnail" className='min-w-[220px] h-[250px]'/>
-                     <div className='absolute bg-black/50 bottom-0 text-center left-0 w-full h-full  text-white'>
-                        <h1 className='capitalize font-bold text-sm'>{blog.title}</h1>
-                        <div className='flex gap-2 items-center text-center text-sm my-2'>
-                          <p className='font-semibold text-sm'>{blog.author}</p>
-                            {" - "}
-                          <p className='text-sm'>{blog.timestamps.toDate().toDateString()}</p>
-                        </div>
-                      </div>
-                </Link>
+    <section className="">
+      <div
+        className="overflow-x-scroll flex gap-6 container scroll-container"
+        ref={scrollRef}
+      >
+        {blogs.map((blog) => (
+          <article key={blog.id} className="relative ">
+            {blog.trending === "yes" && (
+              <Link to={`/blog/${blog.id}`} className="">
+                <img
+                  src={blog.image}
+                  alt="thumbnail"
+                  className="min-w-[330px] h-[220px] rounded-md"
+                />
+                <div className="mt-3">
+                  <h1 className="capitalize text-lg text-black/80 font-bold">{blog.title}</h1>
+                  <div className="flex gap-[6px] items-center text-black/70 text-center text-[12px] my-2">
+                    <p>{blog.author}</p>
+                    {" - "}
+                    <p>
+                    {formatDistanceToNow(blog.timestamps.toDate(), { addSuffix: true })}
+                    </p>
+                    <div className="bg-black/60 h-3 w-[1px]"></div>
+                    <p>{calculateReadingTime(blog.content)}</p>
+                    <div className="bg-black/60 h-3 w-[1px]"></div>
+                    <CiBookmark size={16}/>
+                  </div>
+                </div>
+              </Link>
             )}
-            </article>
+          </article>
         ))}
-         </div>
+      </div>
 
-         <div className='flex justify-center items-center gap-3 mt-6'>
-            <IoIosArrowBack 
-              size={27} className='hover:bg-black/10 rounded-full p-1 cursor-pointer transition-all'
-              onClick={() => scroll('left')}/>
-            <IoIosArrowForward 
-              size={27} 
-              className='hover:bg-black/10 rounded-full p-1 cursor-pointer transition-all'
-              onClick={() => scroll('right')}/>
-         </div>
+      <div className="flex justify-center items-center gap-3 mt-6">
+        <IoIosArrowBack
+          size={27}
+          className="hover:bg-black/10 rounded-full p-1 cursor-pointer transition-all duration-500"
+          onClick={() => scroll("left")}
+        />
+        <IoIosArrowForward
+          size={27}
+          className="hover:bg-black/10 rounded-full p-1 cursor-pointer transition-all duration-500"
+          onClick={() => scroll("right")}
+        />
+      </div>
     </section>
-  )
-}
+  );
+};
 
-export default Trending
+export default Trending;
